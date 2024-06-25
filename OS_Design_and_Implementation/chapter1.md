@@ -107,6 +107,9 @@ System calls for signalling
 * Parameters provide name of file and protection mode (e.g `fd = creat("filename", 0751)`)
 * Mode = flags that determine the perms and access for the file
 * Octal notation = 3 digit number - [0] represents permissions for the owner, [1] represents the permissions for the group associated, [2] represents the permissions of everyone else
+* Special files are called with mknod(path, octal, major device) instead
+* Read and write have various modes (like the Google Drive API)
+* Some programs need to be able to access any part of a file at random; **lseek** used for that purpose
 
 |Digit | Permissions|
 |-|-|
@@ -121,7 +124,21 @@ System calls for signalling
 
 0751 means the owner has full permissions, the group associated can read and execute it, and everyone else can execute it
 
+Terminal modes:
+* Cooked, raw and cbreak
+* Cooked = normal model, erase and kill characters work normally, CTRL commands work as usual
+* Raw = all commands disabled; displays all the characters that have been typed and not just completed lines, used for visual editors
+* cbreak = in between; kill and erase characters for editing are disabled but CTRL commands work
+* In POSIX, canonical mode = cooked mode; in noncanonical mode the input is not processed line by line but the program can specify a minimum no. characters to accept or a timeout before satisfying a read request 
+    * Read request is the system call to read a file
 
+### System calls for directory management:
+* Relating directories/file system as a whole
+* mkdir and rmdir falls under this category
+* **link** allows the same file to appear under 2 or more names, in different directories. Usually used by programming teams.
+    * Every file has a unique i-number identifier
+    * If you ` link("dir/a/file.file", "dir/b/filename.file") `, you get both file.file and filename.file linking to the same file 
+    * Like a fortnite skin - skin changes, player stays the same 
 
 ---------------------------------------------------------------------------------------------------------------------------
 So what's in an OS?:
