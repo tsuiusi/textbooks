@@ -139,10 +139,86 @@ Terminal modes:
     * Every file has a unique i-number identifier
     * If you ` link("dir/a/file.file", "dir/b/filename.file") `, you get both file.file and filename.file linking to the same file 
     * Like a fortnite skin - skin changes, player stays the same 
+* **mount**, as you probably know by now, slaps a file system onto another so they're connected via that node. mount("dev/sda3", "/mnt", 0)
+* Block cache: cache of recently used blocks so you can reuse them quickly.
+* **chdir** and **chroot**: changes working directory, like cd; changes root directory
+    * Server programs do this to limit access by remote users
 
----------------------------------------------------------------------------------------------------------------------------
-So what's in an OS?:
-* File manager
-* Shell
-* Process handling
-* Networking 
+### System calls for protection:
+* Limiting access through commands such as chmod or mkdir
+* Permissions handled through user id (UID)
+
+## OS Structure
+1. Monolithic systems
+2. Layered systems
+3. VMs
+4. Exokernels
+5. Client-server systems
+
+### Monolithic
+* Collection of procedures, no structure
+* Each procedure has a well-defined interface of parameters and results; can call each other
+* The little structure that's possible is achieved by putting parameters in well-defined places (e.g registers or in the stack), then executing a special trap instruction known as the kernel call/supervisor call
+    * Stack = memory kind of stack
+    * Trap instruction = transitions from user mode to kernel mode, allows users to requests services from the OS kernel
+    * Kernel mode - all instructions are allowed; user mode - IO and certain other other instructions are not allowed
+
+![system call](systemcall.png)
+
+System calls (e.g read(fd, buffer, nbytes)):
+1. Push nbytes
+2. Push &buffer (memory location of the buffer) (calling by reference)
+3. Push fd 
+> C and C++ compilers push the paramters on to the stack in reverse order
+4. Make actual call to library procedure
+5. Library procedure places system call in a place where OS expects it
+6. TRAP instruction -> switches from user mode to kernel mode, starts execution at fixed address
+7. Kernel code examines system call number, dispatches to corresponding system call handler (via pointers indexed on system call number)
+8. System call handler runs
+9. TRAP instruction used to return to user mode, control returned to user-space library procedure
+10. Returns to user program in the usual way procedure calls return
+11. Clean up stack -> removes pointer of parameters pushed before call
+
+> At step 9 the system can block the call if needed (e.g reading keyboard input but nothing has been typed)
+
+![monolithic structure](monolithic.png) 
+
+### Layered Systems
+
+Layers of Dijkstra's THE operating system:
+0. Processor allocation and multiprocessing
+1. Memory and drum management (drum is rotary magnetic storage device, obselete)
+2. Operator-process communication
+3. I/O management
+4. User programs
+5. The operator  
+
+### VMs
+![vm/370](vm370.png)
+* Identical to true hardware
+* Loading an OS onto VM address space 
+
+### Exokernels
+* Allocates resources to VMs and checks attempts to use them so nobody is using another machine's allocated resources
+* Saves a layer of mapping: each VM thinks it has its own disk, but it's the partitioned space provided by the exokernel
+
+### Client-server model
+* Moving code to higher layers so the kernel is distilled to the absolute minimum
+* Services obtained by sending messages to server processes
+* Used in distributed systems -> regardless of if it's a VM or a server across a network, message out reply back
+
+So basically an OS is these 4 things:
+1. File management
+2. Process management
+3. Memory management
+4. I/O device management
+
+A handful of system calls dictate what the OS can do. MINIX has 6 groups:
+1. Process creation/termination
+2. Signal handling
+3. RW files
+4. Directory management
+5. Protects information
+6. Keeping track of time
+
+
