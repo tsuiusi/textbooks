@@ -269,4 +269,22 @@ Multiple queues:
 
 Shortest process next:
 * Choose the shortest job 
+* Decay is also used here (called aging)
+
+Guaranteed scheduling: 
+* Processes
+* How much CPU each process has had since creation
+* Chooses the one with the lowest ratio of given time:needed time
+
+Lottery:
+* Gambling
+* Winner gets *x* amount of CPU time
+* Scheduling is highly responsive, if a new process shows up the very next lottery it has a chance of winning
+* Cooperating processes can share/exchange tickets if they so wish
+
+Fair-share scheduling: 
+* Allocating identical amounts of compute to each process
+* More processes = user has more of the CPU (e.g user 1 has 3, user 2 has 7, then 1 gets 30% and 2 70%)
+
+### Real time scheduling 
 
