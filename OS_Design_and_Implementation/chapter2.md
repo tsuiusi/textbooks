@@ -287,4 +287,94 @@ Fair-share scheduling:
 * More processes = user has more of the CPU (e.g user 1 has 3, user 2 has 7, then 1 gets 30% and 2 70%)
 
 ### Real time scheduling 
+* When an external device generates stimuli and the computer has to react (like a keyboard? cd player is one)
+* Hard real time - absolute deadlines; soft real time - occasional miss is tolerated
+* Periodic or aperiodic
+* A RT system that meets the criteria (sum(CPU time/periodicity) <= 1) is said to be **schedulable**
+    * e.g a soft RT system with 3 periodic events, periods 100, 200, 500 msec respectively.
+    * If these events require 50, 30, and 100 msec of CPU time per event the system is schedulable since 0.5 + 0.15 + 0.2 <= 1
+    * RT scheduling algorithms can be static/dynamic (decisions before running, decisions while running)
 
+Policy vs Mechanism:
+* Mechanism is how the scheduling happens (e.g via system calls in some way)
+* Policy is how the scheduling is decided 
+* Separating the two allows the scheduler to make the best choice via accepting user inpuit
+
+Thread scheduling:
+* For multithreaded processes
+* 2 levels of parallelism: processes and threads
+* User level:
+    * Each thread is switched internally with CPU bursts and runs process by process rather than switching threads between processes 
+    * Basically a process is run until its quantum is up, and thread switching occurs internally as per the CPU time specified by the thread
+* Kernel level:
+    * Kernel picks a thread without considering which process it belongs to
+    * Allocates quantum to threads rather than processes, forcibly stopped if the thread runs out
+    * Since the kernel knows which thread belongs to which process it can account for that (switching processes is more expensive)
+
+![multithreading](multithreading.png)
+
+## Processes in MINIX 3
+* UNIX is monolithic, MINIX 3 is a collection of processes that communicate with each other and with user processes
+* Message passing is neede3d to make it work better
+
+### Internal structure of MINIX
+![internal structure](internal_structure.png)
+
+Kernel
+* Roles 
+    * Kernel in bottom layer schedules processes, manages transition between states; also handles interprocess messaging
+    * Also supports access to the IO ports and interrupts; modern processors use privileged kernel mode instructions not available to normal processes
+    * Clock task - IO device driver that interacts with the hardware (generates timing signals)
+* Functions
+    * Provides privileged kernel calls to the drivers and servers above 
+    * RW IO, copying data between addresses, etc
+    * Implementation of these calls = system tasks
+* Almost entirely written in C, some assembly
+
+User mode
+* 3 layers, but can be considered one since the kernel treats them the same way
+* Limited to user mode instructions, can't access IO ports directly
+* Processes can potentially have special privileges, real difference between 2, 3, and 4 (2 has most, 4 has none)
+* Roles
+    * Layer 2: device drivers - request the system read/write data to IO ports
+    * Layer 3: servers - provides services to user processes. Process manager carries out MINIX system calls involving start/stop of process execution (fork, exec, exit) and managing memory (file system read, mount, chdir)
+        * Other servers exist in layer 3, performs MINIX 3 specific processes
+        * Information server: handles jobs like debugging and status information about drivers and servers
+        * Reincarnation servers: starts/restarts device drivers that aren't loaded into memory at the same time as the kernel. Kills it if necesary
+        * Network server
+    * Layer 4: system calls and user processes - shells, editors, compilers, user-written compiled C programs
+        * Daemons are also in this layer (background processes, executed periodically 
+* Drivers in layers 2 & 3 are referred to as **system processes**
+* Device drivers are completely implemented in the user space 
+ 
+### Process management 
+Startup:
+1. Boot -> looks for files in partitions, loads them into memory (kernel, process manager, file system) (**boot image**)
+2. Other programs loaded onto boot image: reincarnation server, RAM disk, console, log drivers, init
+3. Kernel starts system and clock tasks -> process manager and file system; then they cooperate to start other servers and drivers that are part of the boot image
+4. After everything is loaded in the boot iamge has blocked will *init* execute
+
+![components](minixcomponents.png)  
+
+Initialization of the process tree:
+1. Init: last process of the boot image; starts *service* and executes /etc/rc shell script (run commands) 
+2. Service: runs as a child of init; user interface to reincarnation server, starts a all system processes (sans process manager) as its children (floppy, cmos, is (information server)) 
+3. After cmos *rc* initializes the clock, checks for all the file systems, mounts them, and starts daemons
+4. *init* reads /etc/ttytab, listing all the terminal devices, executes login, and executes user's shell
+5. All the information is kept in the process table, which is divided amongst the kernel, process manager, and file system
+> Fork and exec are the two principle processes of managing processes in MINIX 3
+
+### Interprocess communication
+* send(dest, &message)
+* receive(source, &message)
+* sendrec(src\_dst, &message)
+* notify(dest): used when a process needs to make another aware that something important happened (nonblocking)
+
+Notes:
+* User processes can't message one another, relies on servers in layer 3 which messages drivers in layer 2
+* Sender blocks until destination does *receive*
+* Deadlocks can occur if two processes try to message each other at the same time; so send is restricted until it receives
+* Rendezvous method used to avoid issue of buffering (receiver blocks until receive)
+* Bitmap included? 
+
+### Process scheduling
