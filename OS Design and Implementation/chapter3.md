@@ -216,3 +216,30 @@ Resource trajectories:
 * First phase: process tries to lock all records it needs, one at a time. If success, move on
 * Second phase: perform updates, release locks
 * Not practical - you can't just terminate a process because the resource is unavailable to start again. Only when the programmer is very stuck.
+
+## I/O in MINIX 3
+### Interrupt handlers and I/O Access
+* Driver starts IO device -> blocks -> message -> continue
+* Disk devices are very simple, so they're easy to handle
+* Sometimes messsage passing has a cost
+* Sometimes batching interrupts occur if the IO per message is very low; doesn't really happen in MINIX 3
+    * Clock is an exception, message sent to clock task only after a current process used up its quantum
+    * Unique interrupt handler since it runs in kernel space; has access to any variable in kernel space; nothing else has this level of access
+* Devices can't because that's dangerous
+
+Levels of IO access:
+1. Access to memory outside its normal data space (e.g memory driver to manage RAM)
+    * System task allows other segments to be defined and accessed by user-space processes
+    * Area reserved for RAM disk is treated equally
+2. Machine level instructions available only in kernel mode (e.g drivers managing IO ports)
+    * Writing to a port, reading from a port
+    * System task does IO for less-privileged processes
+    * Polling loop can be done if response fast, failsafes can be made by counting the no. interations (like in my drive calls)
+3. Responding to interrupts (e.g HDD driver writing to disk controller)
+    * Device driver initiates receive operation 
+    * 
+4. Respond to unpredictable interrupts (e.g keyboard driver) 
+
+All cases are supported by kernel calls handled by the system task.
+
+
