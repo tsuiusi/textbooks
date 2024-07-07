@@ -211,6 +211,7 @@ Dealing with deadlocks:
 
 Resource trajectories:
 * States and completion and usage
+![trajectories](resourcetrajectories.png)
 
 ### Two phase locking
 * First phase: process tries to lock all records it needs, one at a time. If success, move on
@@ -237,9 +238,57 @@ Levels of IO access:
     * Polling loop can be done if response fast, failsafes can be made by counting the no. interations (like in my drive calls)
 3. Responding to interrupts (e.g HDD driver writing to disk controller)
     * Device driver initiates receive operation 
-    * 
+    * Timer to hedge against failure, receive will get notified either because the message was received or the timer expired
 4. Respond to unpredictable interrupts (e.g keyboard driver) 
+    * Input can come from [anytime, anywhere](https://www.youtube.com/watch?v=lv5R6C3hz54) so you can't just make a blocking *receive* call
+    * There are a few ways of dealing with this:
+    1. Deal with the interrupt as fast as possible
+    2. Keep reading the data while the interrupt is being handled
+    3. Interrupts generate notifications, nonblocking, no data loss
+    4. Watchdog timers
 
 All cases are supported by kernel calls handled by the system task.
 
+### Device drivers 
+* Each device has its own driver, all fully-fledged processes with their own state, registers, stack, etc
+* Communicate with file system via message passing
+* Separation of hardware and software makes configuration easy (just change the drivers)
+* Header files for general functions (*Driver.h*)
+* **Function of each driver is to accept requests from other processes - normally file system - and carry them out.**
 
+![system communications](systemcommunications.png)
+
+In UNIX all processes have two parts: user-space and kernel-space. When a system call is made, the OS switches from user-space to kernel-space part (artifact from MULTICS design).
+* Device drivers in UNIX are kernel procedures called by kernel-space
+* If it needs to sleep until receive, a kernel process that puts it to sleep is called
+
+Monolithic (UNIX) vs Process-based (MINIX)
+* MINIX is processed based because they prioritized cleaner software and kinda ignored efficiency since computers were getting faster
+* 5-10% performance loss
+* Each devices blocks by sending a receive
+
+![messages](messages.png)
+
+### Device-independent I/O software
+* Basically the file system
+* Procedure is basically init -> await -> execute -> respond
+* Also handles protection and etc
+
+Deadlock handling:
+* Same way as UNIX: ignore the issue
+* Minimize the risk of the issue first
+    * User processes only allowed *sendrec*, so it never locks up 
+    * *notify* allows messages to be sent upstream (to the receiver) and check for things
+    * Locks (usually in */usr/spool/locks/*) create **lock files**
+    * POSIX-style adviosry file locking
+* Nothing is enforced, depends on the good behavior of the processes
+
+### Block devices
+> Common block devices, RAM, HDD, floppy disk
+
+Overview:
+* Usually 3 block devices: floppy driver, IDE (integrated driver electronics, not interactive development environment) HDD driver, RAM driver
+
+Gonna skim the rest and come back later; interesting how RAM is allocated in the main memory here. Was there no dedicated RAM?
+
+pg 281
