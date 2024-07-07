@@ -58,4 +58,30 @@ Now include dividends:
 * The buyer receives the dividends
 * Subtract dividend from carrying cost
 
+Arbitrage-free markets: when no profits can be made by either buying/selling a contract, all credits and debits (including expected return) must exactly cancel out
+* Forward price (price of contract at the end of the holding period) is the current price + expected return to offset debits/credits\
+* e.g holding costs are 4 for a 100 stock, forward must be 104; dividend 1, forward 103. 
+* Calculation of forward is dependent on market conditions and the characteristics of the contract.
+    * Stocks: price, holding period duration, interest rates, dividends
+    * Futures: the option purchase price
+
+Using this assumption, we can find the expected return for any underlying contract. In the case of futures, it's zero.
+
+Basically it's a) making some assumptions to simplify the decision making process, b) quantifying the information provided, and c) using real-world data to predict what will happen and act accordingly
+
+### Summarized steps of developing a model
+1. Propose a series of possible prices at expiration for the underlying contract
+2. Assign a probability to each price
+3. Maintain an arbitrage-free underlying market
+4. From the prices adn probabilities in steps 1, 2, and 3, calculate the expected return for the option
+5. From the expected return, deduct the carrying cost
+> From this we get a theoretical value from which we can begin to trade. (make decisions at, like if it's over/underpriced, basically an analysis of the underlying contract/asset)
+
+Evaluation used be slow, now we have computers. 
+
+The **Black-Scholes Model** (a super popular one because of its simplicity and observable processes) was and is one of the most widely used models.
+* Differentiation is between data (amount, type, preprocessing, how it's represented. Think LLMs), additional mods, execution speed, risk management, and the strategies derived from the data
+* Futures and forex versions are known as Black model and Garman-Kohlhagen model respectively
+
+### Black-Scholes Model
 
