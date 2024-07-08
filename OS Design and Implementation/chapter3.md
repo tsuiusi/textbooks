@@ -15,7 +15,7 @@
     * No **seek operation** - changing the value of the file pointer so rw operations are performed at the new location
     * Printers, network interfaces, peripherals, rats??? are character devices
 
-![devicespeeds](devicespeeds.png)
+![devicespeeds](src/devicespeeds.png)
 
 ### Device controllers
 * Mechanical component (the device itself) + electronic component (adapter/device controller) (the PCB)
@@ -39,7 +39,7 @@ Memmapped I/O:
     * Basically partitions
     * memmap in numpy basically does this to get the address of an array in disk so it doesn't have to copy over to the buffer 
 
-![memmap](memmap.png)
+![memmap](src/memmap.png)
 
 ### Interrupts
 * **Status bits**: test if an output is complete or if new data is available from in input
@@ -58,7 +58,7 @@ Memmapped I/O:
     * Byte count
     * >= 1 control 
 
-![dma](dmatransfer.png)
+![dma](src/dmatransfer.png)
 
 Process:
 * Usually controllers read from a drive as a stream to build the block until it's done, then verifies with a checksum
@@ -81,7 +81,7 @@ Process:
 * Buffering: sometimes data can't be stored in final destination, device doesn't know what to do with packets from network. Must have some sort of output buffer
 * Sharing/dedicated devices: disks used by multiple users, tape drives (obselete) used by single user
 
-![hardware layers](hardwarelayers.png)
+![hardware layers](src/hardwarelayers.png)
 
 ### Interrupt handlers
 * Hide them by having the driver start an IO block until the IO has completed and the interrupt occurs
@@ -143,7 +143,7 @@ Device-independent block size:
     * The daemon - the only process with access to the special file - prints the files. As in, talks to a printer that lasers ink onto paper. 
     * Special file is protected from users so it's fine if it's constantly left open
 
-![iolayers](iolayers.png)
+![iolayers](src/iolayers.png)
 
 ## Deadlocks
 * Lots of resources are single processs at a time - printers, slots in internal tables, etc
@@ -180,7 +180,7 @@ Device-independent block size:
 Scheduling deadlocks also exist.
 
 Deadlock modeling - negating conditions:
-![diagram](resourceallocation.png)
+![diagram](src/resourceallocation.png)
 
 Dealing with deadlocks:
 1. Ignore it.
@@ -202,7 +202,7 @@ Dealing with deadlocks:
 * Only one resource held at a time
 * Indexing resources and requests made in numeric order
 
-![approaches](approaches.png)
+![approaches](src/approaches.png)
 
 ### Avoidance - Banker's algorithm
 * Banker does not have enough cash for everyone's full line of credit
@@ -211,7 +211,7 @@ Dealing with deadlocks:
 
 Resource trajectories:
 * States and completion and usage
-![trajectories](resourcetrajectories.png)
+![trajectories](src/resourcetrajectories.png)
 
 ### Two phase locking
 * First phase: process tries to lock all records it needs, one at a time. If success, move on
@@ -240,7 +240,7 @@ Levels of IO access:
     * Device driver initiates receive operation 
     * Timer to hedge against failure, receive will get notified either because the message was received or the timer expired
 4. Respond to unpredictable interrupts (e.g keyboard driver) 
-    * Input can come from [anytime, anywhere](https://www.youtube.com/watch?v=lv5R6C3hz54) so you can't just make a blocking *receive* call
+    * Input can come from [anytime, anywhere](src/https://www.youtube.com/watch?v=lv5R6C3hz54) so you can't just make a blocking *receive* call
     * There are a few ways of dealing with this:
     1. Deal with the interrupt as fast as possible
     2. Keep reading the data while the interrupt is being handled
@@ -256,7 +256,7 @@ All cases are supported by kernel calls handled by the system task.
 * Header files for general functions (*Driver.h*)
 * **Function of each driver is to accept requests from other processes - normally file system - and carry them out.**
 
-![system communications](systemcommunications.png)
+![system communications](src/systemcommunications.png)
 
 In UNIX all processes have two parts: user-space and kernel-space. When a system call is made, the OS switches from user-space to kernel-space part (artifact from MULTICS design).
 * Device drivers in UNIX are kernel procedures called by kernel-space
@@ -267,7 +267,7 @@ Monolithic (UNIX) vs Process-based (MINIX)
 * 5-10% performance loss
 * Each devices blocks by sending a receive
 
-![messages](messages.png)
+![messages](src/messages.png)
 
 ### Device-independent I/O software
 * Basically the file system

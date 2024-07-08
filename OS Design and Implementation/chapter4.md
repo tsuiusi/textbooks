@@ -25,7 +25,7 @@ What a time to be alive
     3. Early PCs (MS-DOS) where portion of the system in ROM is called the BIOS (basic I/O system)
 * Single threaded
 
-![memmanmodels](memmanmodels.png)
+![memmanmodels](src/memmanmodels.png)
 
 ### Multiprogramming with fixed partitions
 * Multiple processes, at the same time
@@ -34,7 +34,7 @@ What a time to be alive
 * Disadvantage is when large queues become empty but the small queues are extremely packed
 * Counter for no. skips can be implemented to speed up queues
 
-![partitionqueues](partitionqueues.png)
+![partitionqueues](src/partitionqueues.png)
 
 ### Relocation and Protection
 * Problems introduced by multiprogramming
@@ -56,11 +56,11 @@ In batch systems, jobs are loaded into partitions and stay there until they're d
 * See diagram
 * Can compact all the processes and move them down as far as possible in a process called *memory compaction*; not often done because it requires a lot of CPU time
 
-![swap](swapmemory.png)
+![swap](src/swapmemory.png)
 
 Memory is allowed to grow either via switching holes (like hermit crabs) or allocated extra memory when it starts; else they're blocked/killed.
 
-![extramemory](extramemory.png)
+![extramemory](src/extramemory.png)
 
 ### Memory management with bitmaps
 When memory is assigned dynamically, the OS must manage it, either via **bitmaps** or **free lists** (basically a linked list).
@@ -72,7 +72,7 @@ Bitmaps:
 * Good for fixed-size memory
 * Issue is that if you want to add another process of size *k*, you need to find *k* consecutive units and that's slow
 
-![bitmap](bitmapallocation.png)
+![bitmap](src/bitmapallocation.png)
 
 ### Memory management with linked lists
 What did I say?
