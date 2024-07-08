@@ -81,7 +81,7 @@ For some reason the processes are usually forked:
 * That's the reason that commands such as (cp file1 file2) are forked 
 
 ### Main system calls of MINIX:
-![system calls](systemcalls.png) 
+![system calls](src/systemcalls.png) 
 
 Programs of system calls:
 * use the declaration main(argc, argv, envp)
@@ -163,7 +163,7 @@ Terminal modes:
     * Trap instruction = transitions from user mode to kernel mode, allows users to requests services from the OS kernel
     * Kernel mode - all instructions are allowed; user mode - IO and certain other other instructions are not allowed
 
-![system call](systemcall.png)
+![system call](src/systemcall.png)
 
 System calls (e.g read(fd, buffer, nbytes)):
 1. Push nbytes
@@ -181,7 +181,7 @@ System calls (e.g read(fd, buffer, nbytes)):
 
 > At step 9 the system can block the call if needed (e.g reading keyboard input but nothing has been typed)
 
-![monolithic structure](monolithic.png) 
+![monolithic structure](src/monolithic.png) 
 
 ### Layered Systems
 
@@ -194,7 +194,7 @@ Layers of Dijkstra's THE operating system:
 5. The operator  
 
 ### VMs
-![vm/370](vm370.png)
+![vm/370](src/vm370.png)
 * Identical to true hardware
 * Loading an OS onto VM address space 
 
