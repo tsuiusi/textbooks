@@ -92,4 +92,58 @@ First fit:
 * Break hole into two - one for process, one for unused memory
 
 Next fit:
-* Same thing, but keeps track of where the next suitable hole is 
+* Same thing, but keeps track of where the next suitable hole is
+* Slightly worse
+
+Best fit:
+* Searches the whole list for the hole that fits the best
+* Slower
+* First fit generates larger holes on average
+
+There's also worst fit, to take the biggest hole possible, but that's not good
+
+Quick fit: 
+* Maintain separate lists for common sizes (standards)
+* Expensive, but very fast
+
+## Virtual memory
+When programs are too big to fit into memory (like ImageNet dataset)
+
+**Overlays**: splitting the program into pieces, and running them sequentially
+* Operations done by the system
+* Virtual memory: the combined size may exceed the actual available physical size, rest is kept on disk
+* Works with multiprogramming devices
+
+### Paging
+* On any computer there exists a set of memory addresses that programs can produce
+* When the program uses an instruction (e.g MOV REG, 1000), it does this to copy the contents of 1000 to REG
+* **Virtual addresses** - these program-generated addresses, form **virtual address space**
+* When virtual memory is used, they don't go to the memory bus; instead, they go to a Memory Management Unit that maps the virtual addresses onto physical memory addresses
+
+![mmu](mmu.png)
+
+Virtual Address Space:
+* Divided up into units - **pages**; corresponding units in physical memory - **page frames**
+* Always the same size, transfers between RAM and disk are always in page units
+* MMU maps the instructions between virtual and physical memory space
+* A **present/absent bit** keeps track of which pages are physically present in memory
+* If the program tries to use an unmapped page, the MMU notices the fact and causes the CPU to trap the OS - **page fault**
+    * The OS takes a little-used page frame, writes the contents to the disk, and puts the new page in its place
+* Page table is used to keep track of everything
+
+![memmapping](memmapping.png)
+![mmuinternals](mmuinternals.png)
+
+### Page tables
+Virtual address is split into a virtual page numer (higher order bits) and an offset (lower order bits) 
+* The offset deterines the size of the partition (like when you boot Arch)
+* VPN is used to find page frame number
+
+The page table must be a) very big and b) very fast
+* Each process has its own page table
+* Addresses are at least 32 bits, very big
+* Must be done on every memory reference, bottleneck
+
+
+
+
