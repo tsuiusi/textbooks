@@ -12,7 +12,7 @@ Steps
 Valuation: either zero, at/out of money, or intrinsic value
 
 ## Buy and sell strategies
-![calls and puts](callsputs.png)
+![calls and puts](src/callsputs.png)
 
 Calls
 * The intrinsic value has to be greater than the strike price for it to be profitable
@@ -26,33 +26,33 @@ Puts
 > An option's value is always determinate on it's underlying asset
 
 We can graph it, but first, profit and loss graph:
-![plgraph](plgraph.png)
+![plgraph](src/plgraph.png)
 
 Put and call graph: 
-![graph of puts and calls](callnputgraph.png)
+![graph of puts and calls](src/callnputgraph.png)
 > Holy shit it's relu
 
 ## Risk/Reward characteristics
 > All the graphs are relu
 
 ### Long call
-![longcall](longcall.png)
+![longcall](src/longcall.png)
 * The higher the price at expiration, the better - you get more cash/share
 * Loss is limited to premium, worst case you'll pay the strike price
 
 ### Long put
-![longput](longput.png)
+![longput](src/longput.png)
 * The lower the price at expiration, the better - you get more shares/cash
 
 ### Short call
-![shortcall](shortcall.png)
+![shortcall](src/shortcall.png)
 * You're betting it goes down, so you sell the option to buy it
 * Loss theoretically infinite since the asset value can go infinitely up (not likely though) (losing potential earnings)
 * Gain is limited to the premium  
 * Example is if someone sold me the right to buy NVIDIA at $600 in January, and it rises to $1000. They lose $400 - premium dollars
 
 ### Short put
-![shortput](shortput.png)
+![shortput](src/shortput.png)
 * You're betting it goes up, so you sell the option to sell it
 * Loss capped at strike price
 * Gain limited to premium
@@ -63,18 +63,18 @@ Avoiding risk is impossible as a trader. You've gotta hedge your bets, cover you
 ## Combination strategies
 > 
 
-![arbitrage1](arbitrage1.png)
+![arbitrage1](src/arbitrage1.png)
 * Maximum loss is 6.4, only if the option is 100 at expiration
 * Range for which you make money either way
 * Sensible if there's gonna be movement definitely, but you don't know which way
 
-![direction](dontletthemknow.png)
+![direction](src/dontletthemknow.png)
 
 Vice versa for shorts - if you're pretty damn sure it'll stay the same. Otherwise loss is basically uncapped.
-![arbitrage2](arbitrage2.png)
+![arbitrage2](src/arbitrage2.png)
 
 You can also long *and* short to create capped profits and losses.
-![arbitrage3](arbitrage3.png)
+![arbitrage3](src/arbitrage3.png)
 
 ## Rules for the graphs
 1. Bends and corners will happen at the exercise prices
@@ -91,8 +91,8 @@ You can also long *and* short to create capped profits and losses.
 * Max upside is 5.5 + 3(1.15) = 7.95
 * After 105 profits decrease by 2 per each increase 
 
-![arbitrage4](arbitrage4.png)
-![arbitrage4-2](arbitrage4-2.png)
+![arbitrage4](src/arbitrage4.png)
+![arbitrage4-2](src/arbitrage4-2.png)
 
 ### Consider a more complex example
 * Short one 90 call at 9.35
@@ -110,9 +110,9 @@ You can also long *and* short to create capped profits and losses.
     * Above 100 all puts are worthless, all calls are long underlying contracts. Position is new long one call, above 100 it **acts as a long underlying contract**. Each point up = one point profit
 3. As long as all options expire at the same time, the value of the position at expiration will be fully determined by the price of the underlying contract
 
-![arbitrage5](arbitrage5.png)
-![arbitrage5-1](arbitrage5-2.png)
-![arbitrage5-2](arbitrage5-2.png)
+![arbitrage5](src/arbitrage5.png)
+![arbitrage5-1](src/arbitrage5-2.png)
+![arbitrage5-2](src/arbitrage5-2.png)
 
 ### Consider another example
 * Long one 100 call at 2.7

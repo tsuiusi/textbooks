@@ -1,6 +1,7 @@
 # Chapter 3: Introduction to Theoretical Pricing Models 
 > Correctly predicting speed *and* direction is usually beyond most traders' capabilities
 > Quantitative trading is more suited to highly complex markets with more hidden trends and patterns, more dimensions to play with
+> Data -> model -> prediction
 
 ### Quantifying strategies with numbers rather than "probably"
 * Direction of market heavily influences trading strategy
@@ -84,4 +85,52 @@ The **Black-Scholes Model** (a super popular one because of its simplicity and o
 * Futures and forex versions are known as Black model and Garman-Kohlhagen model respectively
 
 ### Black-Scholes Model
+Minimum 5 characteristics about the option and its underlying model:
+1. Exercise price
+2. Amount of time remaining to expiration
+3. Current price of underlying contract
+4. Risk-free interest rate over the life of the option
+5. Volatility of the underlying contract
 
+They also incorporated the idea of a *riskless hedge*, which is that for every option there is a theoretically equivalent position in the underlying contract that for small price changes in the underlying contract the option position will gain/lose value at exactly the same rate (for small price changes).
+* To take advantage of a theoretically mispriced option, hedges are established - opposing market positions to offset the option position
+* The correct proportion of underlying contracts to establish this riskless hedge is the *hedge ratio*
+
+Example: 
+* If the price is 100 and there's 0.25 chance it goes to 120, the probability might drop down to 0.1 if the price drops to 80 (live adjustment). 
+* If you establish a riskless hedge, then by adjusting the hedge as market conditions change, you account for these events
+* Option is the substitute for the position {long: call, short: put}
+* If a call can be purchased/sold for less/more than its theoretical value, it will in the long run be more profitable to long/short the position by buying/selling calls rather than the underlying contract
+* Same thing for puts, but more rather than less
+
+## Definitions and elaborations
+### Exercise price
+well duh. can't be changed. value specified by the contract.
+
+### Time to expiration
+* Entered into BS model as an annualized number - percentage of a year
+* Usually incorporated into the model, just input days
+* Trading days inputted only for volatility calcs but interest compounds on holidays too yknow
+* Just parameters to adjust for this
+
+### Price of underlying
+* Bid price, asked price 
+* "the correct use of an option's theoretical value requires us to hedge the option position with an opposing trade in the underlying contract"
+* Usually people use the last trade price as a basis, not precise, **experienced traders will rarely enter an option market without knowing the exact bid and offer in the underlying market**
+
+### Interest rates
+* Effect depends on the type of settlement
+    * Stock type -> increasing interest rate decreases value of option (since getting the issue itself would be better)
+    * Also increases forward price -> value of calls, decreses puts
+* Rates might also be different due to currency
+* Significance varies
+* Value used depends on the issue, yield of bonds/government securities are generally used for benchmarking (60 day option -> 60 day bond)
+
+### Dividends
+* Only a factor in stocks that pay dividends, can be omitted
+* Assume they use the same policy
+* Ex-dividend dates and that time period is very unpredictable
+* So they kinda just ignore it
+
+### Volatility
+* see next chapter

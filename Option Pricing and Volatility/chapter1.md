@@ -38,7 +38,7 @@ A call will only have intrinsic value if the price is greater than the strike pr
 * If the exercise price == current price the asset, it's at the money
     * Commonly used to describe puts/calls whose exercise prices is closest to the current prices of the underlying contract
 
-![innout](innout.png)
+![innout](src/innout.png)
 
 > If a $400 gold call is trading at $50 with gold at $435, the time premium is $15 since the intrinsic value is $35.
 
@@ -46,7 +46,7 @@ A call will only have intrinsic value if the price is greater than the strike pr
 * Please don't default
 * Clearing houses and firms try minimize that
 
-![clearing process](clearingprocess.png)
+![clearing process](src/clearingprocess.png)
 
 
 ### Margin requirements
