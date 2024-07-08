@@ -120,7 +120,7 @@ When programs are too big to fit into memory (like ImageNet dataset)
 * **Virtual addresses** - these program-generated addresses, form **virtual address space**
 * When virtual memory is used, they don't go to the memory bus; instead, they go to a Memory Management Unit that maps the virtual addresses onto physical memory addresses
 
-![mmu](mmu.png)
+![mmu](src/mmu.png)
 
 Virtual Address Space:
 * Divided up into units - **pages**; corresponding units in physical memory - **page frames**
@@ -131,8 +131,8 @@ Virtual Address Space:
     * The OS takes a little-used page frame, writes the contents to the disk, and puts the new page in its place
 * Page table is used to keep track of everything
 
-![memmapping](memmapping.png)
-![mmuinternals](mmuinternals.png)
+![memmapping](src/memmapping.png)
+![mmuinternals](src/mmuinternals.png)
 
 ### Page tables
 Virtual address is split into a virtual page numer (higher order bits) and an offset (lower order bits) 
@@ -143,7 +143,12 @@ The page table must be a) very big and b) very fast
 * Each process has its own page table
 * Addresses are at least 32 bits, very big
 * Must be done on every memory reference, bottleneck
+* Can either be switched constantly or entirely kept in the main memory - all hardware points to start of table, works from there
 
+### Multilevel page tables
+Very popular.
 
+Split the whole virtual address into the PT1 field, PT2 field, and offset field
+* 
 
-
+![multilevelpt](multilevelpt.png)
