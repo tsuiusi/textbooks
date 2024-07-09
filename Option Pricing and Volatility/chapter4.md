@@ -15,7 +15,7 @@ E.g a 100 contract, 15 days until expiration, evaluate a 105 call:
 * Evaluate the probability of each option through this
 * Volatility -> variance
 
-![volatilitydistribution](volatilitydistribution.png)
+![volatilitydistribution](src/volatilitydistribution.png)
 
 > Only the outcomes that result in the option finishing in-the-money are important, everything else can be discarded
 
@@ -50,7 +50,7 @@ f(x; \mu, \sigma) = \frac{1}{x\sigma\sqrt{2\pi}} \exp\left(-\frac{(\ln x - \mu)^
 |Mode|e^(μ - σ²)|
 |Variance|(e^σ² - 1) * e^(2μ + σ²)|
 
-![lognormal](lognormal.png)
+![lognormal](src/lognormal.png)
 
 ### Key assumptions governing price in Black Scholes Model
 1. Changes in price of the UC are random, cannot be artificially manipulated, direction of movement can't be predicted
@@ -91,7 +91,7 @@ f(x; \mu, \sigma) = \frac{1}{x\sigma\sqrt{2\pi}} \exp\left(-\frac{(\ln x - \mu)^
 * Keep raising/lowering your volatility until the prediction = market value
 * That value is the **implied volatility**
 
-![theimplication](impliedvolatility.png)
+![theimplication](src/impliedvolatility.png)
 
 Future and implied volatilities are the most important. Future = value, implied = price.
 
@@ -100,7 +100,7 @@ Think about weather forecasts. You don't wear a full down jacket in July for a r
 ### Seasonal volatility
 * Cycles, like commodities
 
-![seasonal](seasonalvolatility.png)
+![seasonal](src/seasonalvolatility.png)
 
 > Given its importance, it is not surprising that the serious option trader spends a considerable amount of time thinking about volatility. Using his knowledge of historical, forecast, implied, and, in the case of agricultural commodities, seasonal volatility, he must try to make an intelligent decision about future volatility. From this, he will look for option strategies which will be profitable when he is right, but which will not result in a disastrous loss when he is wrong. 
 
