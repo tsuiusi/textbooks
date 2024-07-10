@@ -43,3 +43,48 @@ Again, it's the partial derivative of the predicted option price WRT the UC pric
 ### Rate of change
 > Delta can be interpreted as the **rate of change**
 * Interpret it as the rate of change relative to the UC (75 = 75% rate of change)
+* Puts have similar characteristics, except the values move in opposite directions
+    * UC increases -> puts lose value
+    * Puts always have negative deltas
+
+### Hedge ratio
+* The ratio of underlying contracts to options required to stay delta-neutral
+* 100 / delta
+
+### Theoretical/Equivalent underlying position
+* Each 100 deltas represents a theoretical position equivalent to one underlying contract
+    * So if the delta of an option owned is 50 then you're long 1/2 an UC
+    * Vice versa, owning 100 UCs mean you're long 200 options
+* Winning small 19 times might be less than winning once but it's insanely big
+
+## The Gamma
+> Rate of change of delta WRT UC price
+* Greatest when an option is at-the-money 
+* Delta neutral position depends on an estimate of current market conditions
+* As he changes his assumptions, he must constantly change his trading strategies to fit these new assumptions
+(see page 118 in the pdf for more diagrams)
+
+## The Theta
+> Time decay factor - the rate of option value loss 
+* E.g option with $\theta = 0.05$ will lose 0.05 dollars of value each day with no other change in market conditions (2.75 -> 2.70)
+* **Long options always negative theta; short options always positive**
+* When the carrying cost is greater than the volatility component, the option is European and have a theoretical value of less than parity and rise as it slowly approaches expirty date
+* Most options just lose value as time passes
+
+## The Vega/Kappa (means the same thing)
+> Rate of change of theoretical value WRT change in volatility
+* Point change in theoretical value per percentage point change in volatility
+
+Characteristics:
+* Always positive for both calls and puts
+* Highest for at-the-money options
+* Increases with time to expiration
+
+## The Rho
+> Sensitivity of an option's theoretical value WRT interest rates
+* Sensitivity to foreign interest rates are sometimes denoted with phi $\phi$
+* When options are subject to futures-type settlement, rho is 0 since interest doesn't matter
+* When the options are subject to stock-type settlement, rho is always negative for calls and puts
+    * Increasing interest rates increase carrying costs
+
+* Generally disregarded
