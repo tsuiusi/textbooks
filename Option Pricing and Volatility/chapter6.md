@@ -87,5 +87,34 @@ Characteristics:
 * When options are subject to futures-type settlement, rho is 0 since interest doesn't matter
 * When the options are subject to stock-type settlement, rho is always negative for calls and puts
     * Increasing interest rates increase carrying costs
-
 * Generally disregarded
+
+## Summary
+* Delta: ATM calls = 50, ATM puts -50; calls 0 to 100, puts -100 to 0
+* Gamma: ATM options have greater gammas than I/OTM options; proportional to time left
+* Theta: ATM options have greater thetas than I/OTM options; proportional to volatility
+* Vega: same as above but either one; OTM options have the greatest vegas (as a percent of theoretical value); proportional to time left
+
+All these values have their *implied* counterparts
+* All these numbers are additive; multiply the no. shares bought at that value by the value and sum each up
+
+| If you are . . . | Your delta (hedge ratio) position is . . . | Your gamma (curvature) position is . . . | Your theta (time decay) position is . . . | Your vega (volatility) position is . . . |
+|-------------------|-------------------------------------------|------------------------------------------|-------------------------------------------|------------------------------------------|
+| long the underlying<br>short the underlying | positive<br>negative | 0 | 0 | 0 |
+| long calls<br>short calls | positive<br>negative | positive<br>negative | negative<br>positive | positive<br>negative |
+| long puts<br>short puts | negative<br>positive | positive<br>negative | negative<br>positive | positive<br>negative |
+
+| If your . . . position is . . . | you want the underlying contract to . . . |
+|----------------------------------|-------------------------------------------|
+| delta position is . . .<br>positive<br>negative | rise in price<br>fall in price |
+| gamma position is . . .<br>positive<br>negative | move very swiftly, regardless of direction<br>move slowly, regardless of direction |
+| theta position is . . .<br>positive<br>negative | the passage of time will generally . . .<br>increase the value of your position<br>decrease the value of your position |
+| vega position is . . .<br>positive<br>negative | you want volatility to . . .<br>rise<br>fall |
+| rho position is . . .<br>positive<br>negative | you want interest rates to . . .<br>rise<br>fall |
+
+Elasticity: underlying price * delta / theoretical value
+* Amount of leverage
+* AKA leverage value
+* Always analyze risk, but know when to stop
+* Risk isn't eliminated, it's identified and avoided
+
