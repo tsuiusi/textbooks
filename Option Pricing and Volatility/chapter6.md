@@ -3,6 +3,7 @@
 
 ### General effects of market changes
 |If...|Call values will...|Put values will...|
+|-----|-------------------|------------------|
 |Price of UC increases|rise|fall|
 |Price of UC decreases|fall|rise|
 ||||||
