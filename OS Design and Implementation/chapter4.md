@@ -271,3 +271,36 @@ s = process size, p = page size, e = entry size
 * Overhead = $se/p + p/2$
 * Taking the first derivative, we get this: $-se/p^2 + 1/2 = 0$
 * Optimum page size = $\sqrt{2se}$
+
+### Virtual memory interface
+If programmers can name regions of their memory, it may be possible for one process to give another proc- ess the name of a memory region so that process can also map it in.
+
+**Distributed Shared Memory**: allowing multiple processes to share a set of pages, possibly but not necessarily as a single shared linear address space.
+
+## Segmentation
+More virtual address spaces is generally a good thing. e.g in a compiler, you need
+1. A table to hold the source text
+2. Symbol table containing names and attributes
+3. Table containing all the ints and fp constants used
+4. Parse tree containing the syntax of the program
+5. The stack used for procedure calls within the compiler
+
+![idas](src/idas.png)
+* Tables might bump into each other as they grow
+* Solution is to segment into stacks, and make them a linear sequence of addresses
+* Each segment is a separate address space, so they can grow/shrink indpendently
+* Protection is used because everything is discrete and you already know what's in it, so there's no reason to try execute an array spelling [8008135]
+
+![pagensegment](src/pagensegment.png)
+
+### Implementation of pure segmentation
+* Fragment memory, take holes/unused memory, compact the rest
+* Empty memory: checkerboarding
+
+![checkerboarding](src/checkerboarding.png)
+
+### Segmentation with paging: Intel Pentium
+> Obselete
+
+## Overview of the MINIX 3 Process Manager
+
