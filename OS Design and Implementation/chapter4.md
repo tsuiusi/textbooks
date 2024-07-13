@@ -227,4 +227,47 @@ TLB management:
 * Implemented with special hardware that holds the values in a matrix
 
 ### LRU in software
-* 
+* Not Frequently Used (NFU) algorithm: software counter for each page, initally 0
+    * At each clock interrupt the OS checks all the pages in memory and adds the R bit to the counter
+    * When a page fault occurs, the lowest-counter page is kicked
+    * However, because it doesn't forget, pages that might be useless now but useful earlier still remains
+* Modded algorithm: aging
+    * Bits are shifted to the right by 1 bit before adding R
+    * R is added to leftmost bit
+
+![aging](src/aging.png)
+
+## Desgn Issues for Paging Systems
+### Working set model
+Demand paging: starting with empty memory, page fault every time a page is called
+
+Locality of reference: only a small number of pages per process is referenced at any one time
+* If the entire set is in memory, then it will run, but it might not be enough
+* Insufficient memory -> many page faults -> **thrashing**
+
+Working set model:
+* Many pages try to keep track of each process' working set and making sure it's in memory before letting the process run
+* Prepaging: loading pages before process
+
+Aging is needed to keep track of the working set, if it hasn't been used for a while then it's dropped.
+* There's also keeping track of which page is in which working set, can drop pages that aren't in current processes
+
+### Local v global allocation policies
+> Process level v system level
+* Generally global policies work better
+* You can allocate equal shares to each process, which isn't really fair becuase the sizes are usually different
+* You can also allocate via **page fault frequency**, which just controls the allocation and nothing else
+
+![faultframe](src/faultframe.png)
+
+### Page size
+* Chosen by OS
+* If a page doesn't fill the page, the space is wasted - **internal fragmentation**
+* Smaller pages -> more pages needed -> bigger page tables
+
+s = process size, p = page size, e = entry size
+* Pages per process = $s/p$
+* Space on table = $se/p$
+* Overhead = $se/p + p/2$
+* Taking the first derivative, we get this: $-se/p^2 + 1/2 = 0$
+* Optimum page size = $\sqrt{2se}$
