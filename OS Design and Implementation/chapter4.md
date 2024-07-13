@@ -149,6 +149,158 @@ The page table must be a) very big and b) very fast
 Very popular.
 
 Split the whole virtual address into the PT1 field, PT2 field, and offset field
-* 
+1. MMU first uses PT1 to index into the top-level page table and obtain the first entry
+2. Then it uses PT2 to extract entry 3, which corresponds to a specific address inside that 4M chunk, which contains the page frame number of the page containing the address
+3. If that page is in memory, the page frame number taken from the second-level page table is combined with the offset to construct a physical address; else, it causes a page fault (not there)
 
 ![multilevelpt](multilevelpt.png)
+* Only 4 page tables are needed - top leve, second levels for 0-4M, 4-8M, and the last 4M
+* Can be expanded to any levels, but tradeoffs make the effectiveness vary
+
+### Structure of a PT entry
+> Highly machine dependent, but information is basically the same
+![typicalentry](src/typicalentry.png)
+* Page frame number
+* Present/absent bit: whether the page/entry is valid/exists
+* Protection: access rights, 1=read only/0=rw; more bits = more options
+* Modified: page usage, bit used when OS decides to reclaim a frame; modified -> dirty, not -> clean
+* Referenced: set whenever the page is referenced (RW), choosing which page to evict when fault occurs
+* Last bit is used for disabling caching
+
+### Translation lookaside buffers
+> Table of contents so the OS doesn't have to go through the whole process every time, but checking the corresponding page fram.
+* Virtual address presented to the TLB -> valid match -> page frame taken from TLB
+* Speeds up paging
+* If it doesn't exist, it does a normal lookup
+
+TLBs are stored inside the MMU and contains a much smaller no. entries (usually 8-64)
+
+TLB management:
+* Making them more efficient/error robust
+* Sometimes the OS guesses which pages are used next to preload them onto the TLB
+* More caches?
+
+### Inverted page tables
+* One entry per page frame in real memory
+* Indexed by page frame, not virtual page number
+* TLB can hold the heavily used pages, and with a hash table hashed onto the virtual address, all the virtual pages in memory with the same hash value are chained together
+
+![invertedcomparison](src/invertedcomparison.png)
+
+## Page Replacement Algorithms
+> Choosing which page to replace when all the pages frames are full
+
+### Optimal page replacement algorithm
+* Page with the highest label should be removed
+* Unrealizable - no way of knowing which instruction will be used when, which page is next referenced
+* But we can use this to compare other algorithms against. The theoretical optimum.
+
+### Not recently used page replacement 
+* Status bits (as described above) are used to hold statistics 
+* 4 classes for the combinations of referenced (T/F) and modified (T/F) 
+
+||Referenced|Modified|
+|Class 0|F|F|
+|Class 1|F|T|
+|Class 2|T|F|
+|Class 3|T|T|
+
+**Not recently used** removes a page at random from the lowest-numbered nonempty class.
+
+### First in, last out page replacement
+* Page at the head is removed, but not very useful since the head might be the most frequently used
+* Not very commonly used
+
+### Second chance page replacement
+* Modification of FIFO
+* Inspecting the R bit of the oldest page - if it's one, then it's put onto the end
+
+### Clock page replacement
+![clockreplacement](src/clockreplacement.png)
+* Same thing as above, but more efficient as it's in a circular list
+* Head is given by the pointer
+
+### Least recently used
+* Not cheap
+* Linked list of all pages in memory required, most recently used in front and vice versa
+* For every reference, everything needs to be updated, which makes it annoying
+* Implemented with special hardware that holds the values in a matrix
+
+### LRU in software
+* Not Frequently Used (NFU) algorithm: software counter for each page, initally 0
+    * At each clock interrupt the OS checks all the pages in memory and adds the R bit to the counter
+    * When a page fault occurs, the lowest-counter page is kicked
+    * However, because it doesn't forget, pages that might be useless now but useful earlier still remains
+* Modded algorithm: aging
+    * Bits are shifted to the right by 1 bit before adding R
+    * R is added to leftmost bit
+
+![aging](src/aging.png)
+
+## Desgn Issues for Paging Systems
+### Working set model
+Demand paging: starting with empty memory, page fault every time a page is called
+
+Locality of reference: only a small number of pages per process is referenced at any one time
+* If the entire set is in memory, then it will run, but it might not be enough
+* Insufficient memory -> many page faults -> **thrashing**
+
+Working set model:
+* Many pages try to keep track of each process' working set and making sure it's in memory before letting the process run
+* Prepaging: loading pages before process
+
+Aging is needed to keep track of the working set, if it hasn't been used for a while then it's dropped.
+* There's also keeping track of which page is in which working set, can drop pages that aren't in current processes
+
+### Local v global allocation policies
+> Process level v system level
+* Generally global policies work better
+* You can allocate equal shares to each process, which isn't really fair becuase the sizes are usually different
+* You can also allocate via **page fault frequency**, which just controls the allocation and nothing else
+
+![faultframe](src/faultframe.png)
+
+### Page size
+* Chosen by OS
+* If a page doesn't fill the page, the space is wasted - **internal fragmentation**
+* Smaller pages -> more pages needed -> bigger page tables
+
+s = process size, p = page size, e = entry size
+* Pages per process = $s/p$
+* Space on table = $se/p$
+* Overhead = $se/p + p/2$
+* Taking the first derivative, we get this: $-se/p^2 + 1/2 = 0$
+* Optimum page size = $\sqrt{2se}$
+
+### Virtual memory interface
+If programmers can name regions of their memory, it may be possible for one process to give another proc- ess the name of a memory region so that process can also map it in.
+
+**Distributed Shared Memory**: allowing multiple processes to share a set of pages, possibly but not necessarily as a single shared linear address space.
+
+## Segmentation
+More virtual address spaces is generally a good thing. e.g in a compiler, you need
+1. A table to hold the source text
+2. Symbol table containing names and attributes
+3. Table containing all the ints and fp constants used
+4. Parse tree containing the syntax of the program
+5. The stack used for procedure calls within the compiler
+
+![idas](src/idas.png)
+* Tables might bump into each other as they grow
+* Solution is to segment into stacks, and make them a linear sequence of addresses
+* Each segment is a separate address space, so they can grow/shrink indpendently
+* Protection is used because everything is discrete and you already know what's in it, so there's no reason to try execute an array spelling [8008135]
+
+![pagensegment](src/pagensegment.png)
+
+### Implementation of pure segmentation
+* Fragment memory, take holes/unused memory, compact the rest
+* Empty memory: checkerboarding
+
+![checkerboarding](src/checkerboarding.png)
+
+### Segmentation with paging: Intel Pentium
+> Obselete
+
+## Overview of the MINIX 3 Process Manager
+
