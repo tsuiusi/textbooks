@@ -35,9 +35,6 @@ int main() {
 			case NUMBER:
 				push(atof(s));
 				break;
-			case '_':
-				push(atof(v));
-				break;
 			case '+':
 				push(pop() + pop());
 				printf("%f\n", val[--sp]);
@@ -98,6 +95,7 @@ int main() {
 				printf("Error: unknown command %s\n", s);
 				break;
 		}
+		printf("%f\n", val[sp - 1]);
 	}
 }
 
