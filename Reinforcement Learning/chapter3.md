@@ -16,4 +16,4 @@ p specifies a probability distribution for each choice of *s* and *a*, that is,
 
 ### from the four-argument dynamics function *p*, one can compute anything else one might want to know about the environment
 you can find the state transition probabilities:
-$$$p(s'|s,a) \doteq \text{Pr}\{S_t = s' | S_{t-1} = s, A_{t-1} = a\} = \sum_{r \in \mathcal{R}} p(s',r|s,a).$$$
+$p(s'|s,a) \doteq \text{Pr}\{S_t = s' | S_{t-1} = s, A_{t-1} = a\} = \sum_{r \in \mathcal{R}} p(s',r|s,a).$
