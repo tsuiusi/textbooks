@@ -58,12 +58,12 @@ Similarly, a value function is a function estimating how good it is for the agen
 In MDPs, we can define the value function formally by:
 
 
-$$v_\pi(s) \doteq \mathbb{E}_\pi[G_t | S_t=s] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s\right], \text{ for all } s \in \mathcal{S}$$
+$v_\pi(s) \doteq \mathbb{E}_\pi[G_t | S_t=s] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s\right], \text{ for all } s \in \mathcal{S}$
 
 
 Similarly, we can define the q value (action/value function), the expected return of taking action a starting from state s, as:
 
-$$q_\pi(s,a) \doteq \mathbb{E}_\pi[G_t | S_t=s, A_t=a] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s, A_t=a\right].$$
+$q_\pi(s,a) \doteq \mathbb{E}_\pi[G_t | S_t=s, A_t=a] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s, A_t=a\right].$
 
 * They can be estimated from experience
 * Actions generally converge to the action values
@@ -72,12 +72,7 @@ $$q_\pi(s,a) \doteq \mathbb{E}_\pi[G_t | S_t=s, A_t=a] = \mathbb{E}_\pi\left[\su
 Value functions satisfy recursive relationships: 
 
 
-$$\begin{align*}
-v_\pi(s) &\doteq \mathbb{E}_\pi[G_t | S_t=s] \\
-&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t=s] \\
-&= \sum_a \pi(a|s) \sum_{s'} \sum_r p(s',r|s,a) \left[r + \gamma\mathbb{E}_\pi[G_{t+1}|S_{t+1}=s']\right] \\
-&= \sum_a \pi(a|s) \sum_{s',r} p(s',r|s,a) \left[r + \gamma v_\pi(s')\right], \quad \text{for all } s \in \mathcal{S},
-\end{align*}$$
+$$\begin{align\*}v_\pi(s) &\doteq \mathbb{E}_\pi[G_t | S_t=s] \\&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t=s] \\&= \sum_a \pi(a|s) \sum_{s'} \sum_r p(s',r|s,a) \left[r + \gamma\mathbb{E}_\pi[G_{t+1}|S_{t+1}=s']\right] \\&= \sum_a \pi(a|s) \sum_{s',r} p(s',r|s,a) \left[r + \gamma v_\pi(s')\right], \quad \text{for all } s \in \mathcal{S},\end{align*}$$
 
 The final line is the **bellman equation**, one of my favorite equations. it represents the relationship between the value of a state and the values of the successor states. that is, you can use it to predict future rewards and adjust your action based on that.
 * imagine the agent has to get to mars. one option is to fly directly from earth, and another is to take a slingshot maneuver around the earth first to accelerate, and then use that momentum to get there.
