@@ -41,6 +41,11 @@ The MC diagram only shows the actions sampled and go all the way to the end of t
 
 ## Notes from David Silver
 ### MC methods
+* Good convergence
+* Takes longer
+* Always finds the solution that minimizes MSE
+* Better in non-markov situations (POMDP)
+
 Value updates are basically:
 1. Computing predicted return (for the whole trajectory) 
 2. Gradient descenting with the error (difference between actual return and predicted return
@@ -53,6 +58,23 @@ Policy updates are:
 * Basically the same thing, but broken up into smaller chunks (transitions vs episodes)
 * Bootstrapping - learning per turn/per shorter chunk
 * Works for non-terminating episodes (e.g stock markets)
+* Not averaged; lowe variance but higher bias
+* More efficient 
 
 It's closer to the bellman equation than MC methods - the focus is on V(S\_t+1)
 > He raises the example that in MC methods you wouldn't know if you nearly died but in TD methods close calls return negative rewards
+
+TD lambda is when you do TD learning but weigh every successive transition with lambda so they're weighted less and less. 
+> This is getting even closer to the Bellman
+* If we hit a terminating node and it loops 0 over and over again this would be affected way less than TD or MC
+* It's the balancing between MC and TD 
+* TD(1) = MC
+* Sum of offline updates is same for forward and backwards view
+
+### Overfitting both to a set of sample data
+* TD fits to the actual solution whereas MC fits to the solution described by the training data (final value is the real final value)
+* TD is more accurate because it **exploits the markov property** (closed system, stochastic process, determined only by the previous)
+
+ TD looks at oe transition, MC looks at whole trajectory, DP looks at all the available single step transitions.
+
+ Online vs offline learning: updating during episode vs batching to the end
