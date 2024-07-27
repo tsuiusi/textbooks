@@ -31,7 +31,7 @@ $$r(s,a,s') \doteq \mathbb{E}[R_t | S_{t-1}=s, A_{t-1}=a, S_t = s'] = \sum_{r\in
 
 Usually the four-argument *p* function is used but these have their value too.
 
-![robotexample](robotexample.png)
+![robotexample](src/robotexample.png)
 
 ### 3.2 Goals and Rewards
 > That all of what we mean by goals and purposes can be well thought of as the maximization of the expected value of the cumulative sum of a received scalar signal (called reward).
@@ -63,14 +63,13 @@ $v_\pi(s) \doteq \mathbb{E}_\pi[G_t | S_t=s] = \mathbb{E}_\pi\left[\sum_{k=0}^{\
 
 Similarly, we can define the q value (action/value function), the expected return of taking action a starting from state s, as:
 
-$q_\pi(s,a) \doteq \mathbb{E}_\pi[G_t | S_t=s, A_t=a] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s, A_t=a\right].$
+$$q_\pi(s,a) \doteq \mathbb{E}_\pi[G_t | S_t=s, A_t=a] = \mathbb{E}_\pi\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \middle| S_t=s, A_t=a\right].$$
 
 * They can be estimated from experience
 * Actions generally converge to the action values
 * **Monte carlo methods** - averaging over many random samples of actual returns
 
 Value functions satisfy recursive relationships: 
-
 
 $$\begin{align\*}v_\pi(s) &\doteq \mathbb{E}_\pi[G_t | S_t=s] \\&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} | S_t=s] \\&= \sum_a \pi(a|s) \sum_{s'} \sum_r p(s',r|s,a) \left[r + \gamma\mathbb{E}_\pi[G_{t+1}|S_{t+1}=s']\right] \\&= \sum_a \pi(a|s) \sum_{s',r} p(s',r|s,a) \left[r + \gamma v_\pi(s')\right], \quad \text{for all } s \in \mathcal{S},\end{align*}$$
 

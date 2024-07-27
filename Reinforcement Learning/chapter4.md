@@ -37,7 +37,7 @@ gradient ascent because you want to maximize reward, rather than minimize loss
 
 All the updates done in DP algorithms are called expected updates because they are based on an expectation over all possible next states rather than on a sample next state.
 
-![policyiteration](policyiteration.png)
+![policyiteration](src/policyiteration.png)
 
 ![ipe](src/ipe.png)
 

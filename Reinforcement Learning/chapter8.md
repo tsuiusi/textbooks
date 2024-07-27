@@ -7,8 +7,6 @@
     * Distribution: all possible sums of everything and the probabilities of occurence
     * Sample: individual prediction of what's going to happen
 * Planning: any computational process that takes a model as an input and produces/improves a policcy for interacting with the modeled environment
-
-$$Planning\\\\Model -----------> Policy$$
-
-
+$$Planning\\Model -----------> Policy$$
+    * State-space planning: 
 
