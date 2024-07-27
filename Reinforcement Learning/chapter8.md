@@ -71,3 +71,23 @@ $Q(s, a) \leftarrow \sum_{s',r} \hat{p}(s', r|s, a) \left[r + \gamma \max_{a'} Q
 ![backups](src/backups.png)
 
 I'm cooked bro
+
+# David Silver Episode 6: Value Function Approximation
+1. Approximate return from state
+2. Approximate return from SA pair
+3. Take a state, return returns of every next SA pair
+
+ALL OF MACHINE LEARNING IS A FUNCTION APPROXIMATOR
+* Feature combinations
+* NNs
+* Decision trees
+* Fourier
+* Nearest neighbors
+
+The first two are differentiable (backprop) so they're more easily adjustable, and you can change them and make them better.
+
+## Experience Replay with DQN
+* Plays a lot, stores transition in a replay buffer
+* Goes through the randomly created batch, optimizes Q-network and Q-learning targets
+
+see my code
