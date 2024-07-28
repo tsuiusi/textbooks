@@ -67,10 +67,67 @@ In a stochastic environment (random env), variations in estimated transition pro
 ![ps](src/ps.png)
 
 ## Expected vs Sample Updates
-$Q(s, a) \leftarrow \sum_{s',r} \hat{p}(s', r|s, a) \left[r + \gamma \max_{a'} Q(s', a')\right]$
 ![backups](src/backups.png)
+Expected update for a SA pair:
+$$Q(s, a) \leftarrow \sum_{s',r} \hat{p}(s', r|s, a) \left[r + \gamma \max_{a'} Q(s', a')\right]$$
 
-I'm cooked bro
+Corresponding sample update for the SA given the sample next state and reward:
+$$Q(s,a) \leftarrow Q(s,a) + \alpha \left[R + \gamma \max_{a'} Q(S',a') - Q(s,a)\right],$$
+
+The difference is that when the environment is stochastic, there are a few possible next states whereas when you're given the state, then the expected state is identical to the sample state. 
+* Sample update impacted by sampling error, but cheaper because it only considers one next state
+* For a branching factor *b* the expected update is *b* times more expensive than sample updates
+* Next state is the next state produced after the current SA pair
+
+> so it updates the 'value' of the current state based on the discounted future return of that one transition, and does it a lot of times to average the value
+
+![efficiency](src/efficiencygraph.png)
+
+## Trajectory Sampling
+> Updating the entire state space once per sweep/sampling uniformly to see which ones to update/dampling based on the current policy
+
+Basically it's better to sample from actual trajectories because then you wouldn't play random moves like the bongcloud attack.
+
+## Real Time DP
+Same idea - most states are irrelevant, you want to explore start states and relevant states. RTDP is on-policy trajectory sampling version of DP.
+
+## Planning at Decision Time
+Planning while encountering new states, and finishing after the encounter
+
+## Heuristic Search
+State space planning methods using domain-specific knowledge to guide search.
+* Heuristic function estimates the cost/distance to goal state
+* Extension of greedy search past a single step
+
+## Rollout Algorithms
+Estimates action values for a given policy by averaging the returns of many simulated trajectories that start with each possible action then follow the given policy.
+
+Basically predicting the whole trajectory via the policy -> simulating the states -> evaluating the simulated trajectory
+
+The rollout algorithm produces MC estimates of action values only for the current state and some single-use policy (rollout policy), and the goal is to improve the rollout policy, not find the optimal policy. 
+
+Every trial is independent of one another. I think the point of this is just to play so many times you get the benefit of exploring most of the space while not having to DP-style branch everything.
+> We do not ordinarily think of rollout algorithms as learning algorithms because they do not maintain long-term memories of values or policies.
+
+## MCTS
+> What everyone wants to see
+> The core idea of MCTS is to successively focus multiple simulations starting at the current state by extending the initial portion of trajectories that have received high evaluations from earlier simulations
+* It's taking the paths that work well, and going through the possibilities from there
+* Some nodes are better than others
+* Incrementally exttends the tree by adding nodes representing promising states based on simulated trajectories
+    * So an elitist tree-creation policy (tree policy) balances exploration and exploitation
+    * Upper confidence bound
+
+> "At its base, MCTS is a decision-time planning algorithm based on Monte Carlo control applied to simulations that start from the root state; that is, it is a kind of rollout algorithm as described in the previous section. It therefore benefits from online, incremental, sample-based value estimation and policy improvement."
+
+![mcts](src/mcts.png)
+
+PART ONE OF THE BOOK IS DONE.
+1. Seek to estimate value functions
+2. Backing up states along actual/predicted trajectories
+3. All use general policy iteration (GPI) to get smarter
+
+![spaces](src/rlmethodspace.png)
 
 # David Silver Episode 6: Value Function Approximation
 1. Approximate return from state
