@@ -44,7 +44,16 @@ Gradient descent is cool, so we use that. And we use sequential structure to bre
 ## Policy Gradient
 > Karpathy's favorite
 * Let J(theta) be any policy objective function
-* Policy gradient algorithms search for a local maximum in J(theta) by ascending the gradient of the policy WRT parameters theta $$\delta\theta = \alpha\nabla_{\theta}J(\theta)$$
+* Policy gradient algorithms search for a local maximum in J(theta) by ascending the gradient of the policy WRT parameters theta $$\Delta\theta = \alpha\nabla_{\theta}J(\theta)$$
+
+### Score function
+* Assume policy is differentiable whenever it's non-zero and we know the gradient $\nabla_{\theta}\pi_{\theta}(s, a)$
+* Likelihood ratios exploit the following identity
+$$\nabla_{\theta}\pi_{\theta}(s, a) = \pi_{\theta}(s, a)\frac{\nabla_{\theta}\pi_{\theta}(s, a)}{\pi_{\theta}(s, a)} = \pi_{\theta}\nabla_{\theta}log\pi_{\theta}(s, a)$$
+* Score function is $\nabla_{\theta}log\pi{\theta}(s, a)$
+* Gradient policy = gradient of log of policy
+* Score function is gradient of log-likelihood, which you want to maximize (in this case, otherwise you want to minimize)
+* The point of rewriting the gradient into the identity is so you can evaluate and take advantage of the log (so you can perform gradient ascent)
 
 
 
