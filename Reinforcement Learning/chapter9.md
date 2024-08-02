@@ -5,6 +5,7 @@
 
 # Chapter 9: On-policy Prediction with Approximation
 
+
 # David Silver Lecture 7: Policy Gradients
 Model free learning
 
@@ -55,7 +56,24 @@ $$\nabla_{\theta}\pi_{\theta}(s, a) = \pi_{\theta}(s, a)\frac{\nabla_{\theta}\pi
 * Score function is gradient of log-likelihood, which you want to maximize (in this case, otherwise you want to minimize)
 * The point of rewriting the gradient into the identity is so you can evaluate and take advantage of the log (so you can perform gradient ascent)
 
+### Example: softmax policy
+* Weight is a linear combination of the features 
+* Probability is proportional to exponentiated weight
+* Score function is predicted - expected
+$$\nabla_{\theta}log\pi_{\theta}(s, a) = \fi(s, a) - \E_{\pi_{theta}}[\fi(s, .)]
 
+(there's also a gaussian policy)
 
+Model free: take an action, compute the gradient via the policy, and multiply it by the reward - you don't use the model
+* Model doesn't mean ML model, but world model
+* Like it doesn't need the MDP - it learns from the interactions with the world and experience 
 
- 
+### MC PG (REINFORCE)
+* Update params via SGA
+* At each episode, update parameters with the scaled score
+
+### Action Value Action Critic
+* Actor critic algorithm based on action-value critic
+* Critic updates w via linear TD
+* Actor updates theta via policy gradient
+* Same idea as before, there's an optimal between single-step TD and MC methods
