@@ -1,4 +1,5 @@
 # Chapter 5: File Systems
+> Remember that the content of this textbook precedes linux
 
 Issues:
 1. Storage is restricted to size of virtual address space
@@ -151,6 +152,45 @@ I-Nodes:
 * Index nodes
 * Used to keep track of which blocks belong to which file
 * Given that one block, its possible to find all the attributes and addresses of the file's blocks
-* 
+* Indirect blocks can be added to the last location for even more blocks, and you can make even double/triple indirect blocks
+
+![inodes](src/inodes.png)
+
+### Implementing directories
+Essentially, it's there to map the name to the information needed to locate the data
+
+Sharing files - A symbolic link/alias
+
+### Space management
+Block size:
+* Most FS use fixed-size blocks that don't need to be adjacent
+* Small = each file consists of many blocks; large = wasted space
+    * Affects read speed
+    * See graph
+
+![tradeoffs](src/disktradeoffs.png)
+
+Keeping track of spare blocks:
+* A list holds the pointers to the free blocks
+* Bitmaps also work
+
+Backups
+
+this section of notes won't be useful to anyone other than myself because of what i did at work linking directly to this. The issues are all things i had to consider already:
+1. do you back up everything?
+2. Incremental dumps: periodically dumping all the files that have been changed since the backup - i should be very familiar with this. i am the file system itself 
+3. Compression: the issue is obsolete - was a concern with the tape
+4. Inconsistency: what if data is changed while you're backing up? take everything offline?
+5. Security
+
+Everything is a cache. You move from block/buffer cache to outside and cache in, cache out. cache money.
+
+![harddisk](src/harddisk.png)
+
+## Security
+Confidentiality, integrity, and availability:
+* Keep data private (exposure)
+* Maintain access control (users)
+* Make sure we can still access it (DOS)
 
 
