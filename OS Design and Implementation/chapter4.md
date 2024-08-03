@@ -303,4 +303,4 @@ More virtual address spaces is generally a good thing. e.g in a compiler, you ne
 > Obselete
 
 ## Overview of the MINIX 3 Process Manager
-
+Page 439 in textbook
