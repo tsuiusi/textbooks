@@ -29,8 +29,6 @@ Recap:
 
 > Model based doesn't mean machine-learning model, but model of the environment. Like an MDP. 
 
-## Dyna
-
 MDP isn't a specific thing, it's just a process where you take S, A and get R, S'
 * So NNs that predict MDPs only need to take SA as an input (or even just S, then use it to predict A and R) (i thought it before he said it lets go)
 * E.g taking fundamental data -> buy/sell signal
@@ -46,3 +44,35 @@ Table lookup model is an example of non-parametric method - you just look up wha
 * You take observations and model the environment using it:
 * It's literally just counting
 ![m2e](src/m2e.png)
+
+## Dyna
+* Use 'everything'
+* Look at diagrams from last chapter notes:  value/policy -> experience -> model (of the environment) -> improving value
+
+![thedynaidea](src/thedynaidea.png)
+This was shown in the previous notes (?) but there's value in repeating it. Spaced repetition learning.
+
+## Simulation-Based Search
+> How to plan effectively (MCTS?)
+You look ahead, and use the model of the MDP to look forward
+* Focus on what's likely to happen next - there's a lot of things you don't really care about. Like bongcloud attack
+* Simulate episodes from current sttate with model
+* Apply model-free RL to simulated episodes (raw maximizing reward/follow policy)
+* MC control -> MC search; SARSA -> TD search
+
+Given a model M and a simulation policy π:
+1. For each action, simulate K episodes from the current state
+2. Evaluate actions via mean return
+3. Select current action with maximum value
+
+### MCTS (he finally said it)
+1. Given a model M, simulate k episodes from current state s using simulation policy π
+2. Build a search tree containing explored states and actions
+3. Evaluate states by mean return of episodes from s, a
+4. After search, select current (real) action with maximum value in search treeo
+
+Works wonders for non-bruteforceable games (e.g AlphaGo) (explore the parts that work)
+
+# SIMULATION-BASED SEARCH WORKS
+
+
