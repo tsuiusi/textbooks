@@ -48,6 +48,8 @@ Table lookup model is an example of non-parametric method - you just look up wha
 ## Dyna
 * Use 'everything'
 * Look at diagrams from last chapter notes:  value/policy -> experience -> model (of the environment) -> improving value
+* Real data is more valuable
+* Dyna 2 uses simulated experience and real experience
 
 ![thedynaidea](src/thedynaidea.png)
 This was shown in the previous notes (?) but there's value in repeating it. Spaced repetition learning.
@@ -56,7 +58,7 @@ This was shown in the previous notes (?) but there's value in repeating it. Spac
 > How to plan effectively (MCTS?)
 You look ahead, and use the model of the MDP to look forward
 * Focus on what's likely to happen next - there's a lot of things you don't really care about. Like bongcloud attack
-* Simulate episodes from current sttate with model
+* Simulate episodes from current state with model
 * Apply model-free RL to simulated episodes (raw maximizing reward/follow policy)
 * MC control -> MC search; SARSA -> TD search
 
@@ -75,4 +77,83 @@ Works wonders for non-bruteforceable games (e.g AlphaGo) (explore the parts that
 
 # SIMULATION-BASED SEARCH WORKS
 
+# Lecture 9: Exploration and Exploitation
+> Goes back to the first chapters of the textbook
+|Exploration|Gather more information|
+|Exploitation|Make the best decision given current information|
+* Best strategy may involve giving up short-term rewards
+* More information (usually) = better decisions
 
+### Multi-armed bandit
+* Action value is mean reward for action a
+* Optimal value is the action that brings max reward
+* Regret is opportunity loss
+* Total regret = total opportunity loss
+    * Count is the expected number of selections for action a
+    * Gap is the difference in value between action a and the optimal action a*
+* Minimize total regret
+    * Regret is a function of gaps and counts
+    * KL divergence
+    * Described by the gam and KL divergence
+
+Arms are represented as distributions
+* Try the arm with the highest possible values, not the highest probability of having a high value (usually high variance)
+* Higher potential mean > higher mean
+
+### Upper Confidence Bound
+> opposite of ELBO
+* Estimate an upper confidence U for each action value
+* Such that q(a) ≤ Q_t(a) + U_t(a) with a high probability (predicted value ≤ Q Value + Confidence?)
+* Depends on no. times selected, the higher the times the higher the confidence
+* Select action maximizing confidence bound
+
+Hoeffding's inequality: 
+![hoeffding](src/hoeffding.png)
+* If you have some random variables and take an empirical mean of the data, the probability that the sample mean is wrong by more than *u* is upper bounded by e^-2tu^2
+* In MAB cases with bounded rewards (ususally scaled between 0 and 1) the probability you're wrong can be computed the same way
+
+![hoeffdingmab](src/hoeffdingmab.png)
+
+### UCB1 algorithm
+![ucb1](src/ucb1.png)
+* A policy like epsilon-greedy, which chooses action based on maximum return and upper confidence bound
+* The argmax wraps the Q and the sqrt
+
+Achieves log asymptotic total regret 
+![atr](src/atr.png)
+
+Probability matching: selecting action according to probability that it's the optimal action
+* Pick actions in proportion to the probability that they could be the max
+* Thompson sampling: 
+    * Sample from the posterior (computed via Bayes law)
+    * Estimate upper confidence from posterior
+    * Choose action that maximizes Q_t(a) + UC
+    * Basically sample then choose the action that gives the best result
+
+![thompson](src/thompson.png)
+
+## Quantify information
+* Exploration -> gains information
+* Quantifying the value of information - how much are you willing to pay for that bit of information
+* Information is worth more in uncertain situations
+
+At each step there's an information state S~ summarizing all accumulated information
+* Each action A causes a transition to a new information state wtih probability P~^A_S~, S'~
+* ANOTHER MDP M = <S, A , P, R, gamma>
+
+Infinite MDPS can be solved via RL (model free)
+
+Gittins indices is the DP method of solving transition probabilities?
+
+Bayes-adaptive RL:
+* Characterizing information with posterior distribution
+* Update of prior with Beta/whatever distribution is the transition function P
+
+MDPs can be augmented to include information state
+* Augmented state stores state and accumulated information
+* Approximate everything
+
+Methods to explore/exploit:
+1. Random
+2. Optimism
+3. Information state space
