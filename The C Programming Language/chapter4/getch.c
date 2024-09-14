@@ -3,11 +3,18 @@
 #include <ctype.h>
 #include <math.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define MAXOP 100
 #define MAXVAL 100
 #define NUMBER '0'
 #define BUFSIZE 100
+#define IDENTIFIER 1
+
+struct varType{
+	char name[32];
+	double val;
+};
 
 int getch(void);
 void ungetch(int);
@@ -19,26 +26,35 @@ double top(void);
 void duplicate(void);
 void swap(void);
 void clear(void);
+void handleVar(char s[], struct varType var[]);
 
 int bufp = 0;
 int sp = 0; /* max depth of val stack */
 double val[MAXVAL];
+
+struct varType last;
+int pos = 0;
 
 int main() {
 	int type;
 	char v;
 	double op2;
 	char s[MAXOP];
+	struct varType var[30];
 
 	while ((type = getop(s)) != EOF) {
 		switch (type) {
 			case NUMBER:
 				push(atof(s));
 				break;
+			case IDENTIFIER:
+				handleVar(s, var);
+				break;
 			case '+':
 				push(pop() + pop());
-				printf("%f\n", val[--sp]);
 				break;
+			case '_':
+				break;	
 			case '*':
 				push(pop() * pop());
 				break;
@@ -95,7 +111,7 @@ int main() {
 				printf("Error: unknown command %s\n", s);
 				break;
 		}
-		printf("%f\n", val[sp - 1]);
+		// printf("%f\n", val[sp - 1]);
 	}
 }
 
@@ -203,4 +219,23 @@ void clear(void) {
 		val[sp] = 0.0;
 	}
 	sp = 0;
+}
+
+void handleVar(char s[], struct varType var[]) {
+	int i = 0;
+	while (var[i].name[0] != '\0' && i < 29) {
+		if (!strcmp(s, var[i].name)) {
+			strcpy(last.name, s);
+			last.val = var[i].val;
+			push(var[i].val);
+			pos = i;
+			return;
+
+		}
+		i++;
+	}
+	strcpy(var[i].name, s);
+	strcpy(last.name, s);
+	push(var[i].val);
+	pos = i;
 }
