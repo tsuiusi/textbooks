@@ -1,15 +1,25 @@
 #include <stdio.h> 
+#include <string.h>
 
 void printd(int n);
-void ritoa(int n, char s[]);
+void ritoa(int n, char s[], int *index);
+void reverse(char s[]);
+void rreverse(char s[], int *index, int j);
 
 int main() {
-	printd(1234234);
+	char s[20];
+	int index = 0;
+	int number;
+	printf("Enter an integer to convert: ");
+	scanf("%d", &number);
+
+	ritoa(number, s, &index);
+	printf("%s", s);
 	return 0;
 }
 
 // change the first digit in the int into string, do the same to remainder?
-void ritoa(int n, char s[], int *index) {
+void ritoa(int n, char s[], int *index) { // pointer to integer index
 	if (n  < 0){
 		s[(*index)++] = '-';
 		n = -n;
@@ -33,7 +43,23 @@ void reverse(char s[]){
     }
 }
 
-void rreverse(char s[]) {
+void rreverse(char s[], int *index, int j) {
+	// probably iteratively go in
+	if (*index >= j) return;
+	char c = s[*index];
+	s[*index] = s[j];
+	s[j] = c;
+
+	(*index)++;
+	rreverse(s, index, j - 1);
+	// int n = sizeof(s);
+	// if (index < (j=n - index)) {
+	// 	c = j;
+	// 	s[j] = s[index];
+	// 	s[index++] = c;
+	// 	rreverse(s, index);
+	// }
+}
 	
 
 /* printd: print n in decimal */ 
